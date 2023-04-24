@@ -45,7 +45,7 @@ jobs:
           tags: latest
           file: Dockerfile
       - name: Run Tests
-        run: docker run -e FLASK_ENV=testing -it --rm -p 5000:5000 andradeandressa/simpleapp:latest python -m unittest discover
+        run: docker run -e FLASK_ENV=testing --rm -p 5000:5000 ${{secrets.DOCKER_HUB_USERNAME}}/simpleapp:latest python -m unittest discover
 
   deploy-job:
     name: Deploy Job
