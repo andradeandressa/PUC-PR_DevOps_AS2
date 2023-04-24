@@ -67,7 +67,7 @@ jobs:
           password: ${{secrets.NGROK_AUTH_TOKEN}}
       - name: Deploy container with Ngrok
         run: |
-          curl -s https://api.ngrok.com/endpoint \
+          curl -s https://api.ngrok.com/tunnels \
             -H "Authorization: Bearer $NGROK_AUTH_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
