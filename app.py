@@ -13,12 +13,29 @@ def index():
     return render_template('index.html')
 
 def convert(temp, from_unit, to_unit):
-    if from_unit == 'Celsius' and to_unit == 'Fahrenheit':
-        return round((temp * 9/5) + 32, 2)
-    elif from_unit == 'Fahrenheit' and to_unit == 'Celsius':
-        return round((temp - 32) * 5/9, 2)
+    if from_unit == 'Celsius':
+        if to_unit == 'Fahrenheit':
+            return (temp * 1.8) + 32
+        elif to_unit == 'Kelvin':
+            return temp + 273.15
+        else:
+            return temp
+    elif from_unit == 'Fahrenheit':
+        if to_unit == 'Celsius':
+            return (temp - 32) / 1.8
+        elif to_unit == 'Kelvin':
+            return (temp + 459.67) * 5 / 9
+        else:
+            return temp
+    elif from_unit == 'Kelvin':
+        if to_unit == 'Celsius':
+            return temp - 273.15
+        elif to_unit == 'Fahrenheit':
+            return (temp * 9 / 5) - 459.67
+        else:
+            return temp
     else:
         return temp
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
