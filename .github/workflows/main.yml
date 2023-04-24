@@ -56,13 +56,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{env.IMAGE_NAME}}
+          tags: ${{env.IMAGE}}
           registry: registry.ngrok.com
           username: ngrok
           password: ${{secrets.NGROK_AUTH_TOKEN}}
-          build-args: |
-            TAG=${{env.IMAGE_NAME}}
-          extra-build-args: --build-arg TAG=${{env.IMAGE_NAME}}
       - name: Deploy container with Ngrok
         run: |
           curl -s https://api.ngrok.com/endpoint \
