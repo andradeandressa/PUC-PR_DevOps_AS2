@@ -31,21 +31,18 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
 
   test-job:
-    name: Test Job
-    needs: build-job
+    name: SAST Scan
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build Docker Image
-        uses: docker/build-push-action@v2
+      - name: Run SAST Scan
+        uses: AppThreat/sast-scan-action@master
         with:
-          context: .
-          push: false
-          tags: latest
-          file: Dockerfile
-      - name: Run Tests
-        run: docker run -e FLASK_ENV=testing --rm -p 5000:5000 ${{secrets.DOCKER_HUB_USERNAME}}/simpleapp:latest python -m unittest discover
+          type: "python"
+          target: .
+          report_file: sast_report.json
 
   deploy-job:
     name: Deploy Job
@@ -64,6 +61,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: usuariodocker/repositorio:tag
+          tags: ${{env.IMAGE}}
       - name: Deploy
         run: echo "Deploy ok"
