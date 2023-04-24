@@ -20,10 +20,11 @@ jobs:
           to: ${{secrets.TELEGRAM_CHAT_ID}}
           token: ${{secrets.TELEGRAM_BOT_TOKEN}}
           message: |
-            Foi realizado um novo commit!
-
-            Mensagem: ${{github.event.commits[0].message}}
-            Repositório: ${{ github.repository }}
+            ${{github.actor}} realizou um novo commit no repositório ${{ github.repository }}!
+            
+            Mensagem do commit: ${{github.event.commits[0].message}}
+            
+            Veja as alterações: https://github.com/${{ github.repository }}/commit/${{github.sha}}
             
   build-job:
     name: Build Job
@@ -81,3 +82,16 @@ jobs:
           sleep 3
           ngrok_url=$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
           echo "SimpleApp is now available at $ngrok_url"
+          
+  deploy-telegram-job:
+    name: Deploy Notification Job
+    needs: deploy-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{secrets.TELEGRAM_CHAT_ID}}
+          token: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          message: |
+            Deploy realizado!
