@@ -17,16 +17,17 @@ jobs:
       - name: Send message to Telegram
         uses: appleboy/telegram-action@master
         with:
-          to: ${{env.TELEGRAM_CHAT_ID}}
-          token: ${{env.TELEGRAM_BOT_TOKEN}}
+          to: ${{secrets.TELEGRAM_CHAT_ID}}
+          token: ${{secrets.TELEGRAM_BOT_TOKEN}}
           message: |
-            ${{github.actor}} criou um commit:
+            Foi realizado um novo commit!
 
             Mensagem: ${{github.event.commits[0].message}}
             Repositório: ${{ github.repository }}
             
   build-job:
     name: Build Job
+    needs: push-telegram-job
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Docker Hub
