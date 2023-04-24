@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  IMAGE: ${{ secrets.CI_REGISTRY_USER }}/simpleapp:latest
+
+jobs:
+  build-job:
+    name: Build Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.CI_REGISTRY_USER }}
+          DOCKER_PASSWORD: ${{ secrets.CI_REGISTRY_PASSWORD }}
+
+  test-job:
+    name: Test Job
+    needs: build-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: latest
+          file: Dockerfile
+      - name: Run Tests
+        run: docker run -e FLASK_ENV=testing -it --rm -p 5000:5000 <docker-username>/<docker-repo-name>:latest python -m unittest discover
+
+  deploy-job:
+    name: Deploy Job
+    needs: test-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: usuariodocker/repositorio:tag
+      - name: Deploy
+        run: echo "Deploy ok"
