@@ -33,7 +33,7 @@ jobs:
   test-job:
     name: SAST Scan
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-job
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
