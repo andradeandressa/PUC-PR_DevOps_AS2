@@ -18,3 +18,4 @@ jobs:
           token: ${{secrets.TELEGRAM_BOT_TOKEN}}
           message: |
             Um novo pull request foi criado em ${{github.repository}}: ${{github_server_url}}/${{github.repository}}/pull/${{github.event.pull_request.number}}
+
