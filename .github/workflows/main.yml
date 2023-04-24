@@ -48,19 +48,15 @@ jobs:
     name: Deploy Job
     needs: test-job
     runs-on: ubuntu-latest
+    env:
+      NGROK_AUTH_TOKEN: ${{secrets.NGROK_AUTH_TOKEN}}
     steps:
-      - name: Download and Install Ngrok
+      - name: Start Ngrok tunnel
         run: |
-          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-          unzip ngrok-stable-linux-amd64.zip
-          chmod +x ngrok
-          mv ngrok /usr/local/bin/
-      - name: Start Ngrok
-        run: ngrok http 5000 &
-      - name: Deploy to Ngrok
-        env:
-          NGROK_AUTH_TOKEN: ${{secrets.NGROK_AUTH_TOKEN}}
+          tmux new-session -d -s ngrok 'ngrok http 5000'
+
+      - name: Show Ngrok URL
         run: |
           sleep 3
           ngrok_url=$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-          echo "SimpleApp is now available at $ngrok_url"
+          echo "Ngrok tunnel is now available at $ngrok_url"
