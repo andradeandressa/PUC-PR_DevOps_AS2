@@ -1,0 +1,48 @@
+body {
+  margin:5px;
+  color: black;
+}
+
+h1{
+  font-size: 30px;
+}
+
+input {
+  border: solid 1px #CCC;
+  margin: 3px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="submit"] {
+  padding: 10px 30px 10px 30px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(109, 138, 170);
+  text-align: center;
+  background-color: rgb(207, 221, 238);
+  color: black;
+  cursor: pointer;
+  margin: 3px;
+  transition: 0.5s;
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(109, 138, 170);
+  transition: 0.5s;
+}
+
+.resultado {
+
+  margin: 20px 3px 5px 5px;
+  padding: 10px;
+  color: black;
+  background-color: rgb(188, 210, 235);
+  border-width: 2px;
+  border-style: double;
+  border-color: rgb(109, 138, 170);
+  width: 300px;
+  text-align: center;
+}
