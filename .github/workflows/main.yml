@@ -9,6 +9,22 @@ env:
   IMAGE: ${{secrets.DOCKER_HUB_USERNAME}}/simpleapp:latest
   
 jobs:
+
+  push-telegram-job:
+    name: Push Notification Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{env.TELEGRAM_CHAT_ID}}
+          token: ${{env.TELEGRAM_BOT_TOKEN}}
+          message: |
+            ${{github.actor}} criou um commit:
+
+            Mensagem: ${{github.event.commits[0].message}}
+            Repositório: ${{ github.repository }}
+            
   build-job:
     name: Build Job
     runs-on: ubuntu-latest
