@@ -62,17 +62,18 @@ jobs:
           context: .
           push: true
           tags: ${{env.IMAGE}}
-          registry: registry.ngrok.com
+          registry: registry.br.ngrok.io
           username: ngrok
           password: ${{secrets.NGROK_AUTH_TOKEN}}
       - name: Deploy container with Ngrok
         run: |
           curl -s https://api.ngrok.com/tunnels \
-            -H "Authorization: Bearer $NGROK_AUTH_TOKEN" \
+            -H "Authorization: Bearer ${{secrets.NGROK_AUTH_TOKEN}}" \
             -H "Content-Type: application/json" \
             -d '{
               "name": "simpleapp",
               "bind_tls": true,
               "proto": "http",
-              "addr": "simpleapp:5000"
+              "addr": "simpleapp:5000",
+              "region": "br"
             }'
