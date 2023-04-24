@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  IMAGE: ${{ secrets.CI_REGISTRY_USER }}/simpleapp:latest
+  IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/simpleapp:latest
 
 jobs:
   build-job:
@@ -22,8 +22,8 @@ jobs:
           push: true
           tags: ${{ env.IMAGE }}
         env:
-          DOCKER_USERNAME: ${{ secrets.CI_REGISTRY_USER }}
-          DOCKER_PASSWORD: ${{ secrets.CI_REGISTRY_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
   test-job:
     name: Test Job
@@ -40,7 +40,7 @@ jobs:
           tags: latest
           file: Dockerfile
       - name: Run Tests
-        run: docker run -e FLASK_ENV=testing -it --rm -p 5000:5000 <docker-username>/<docker-repo-name>:latest python -m unittest discover
+        run: docker run -e FLASK_ENV=testing -it --rm -p 5000:5000 andradeandressa/simpleapp:latest python -m unittest discover
 
   deploy-job:
     name: Deploy Job
